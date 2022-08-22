@@ -17,9 +17,9 @@ def get_class_paths_and_names(root):
         for name in files:
             file_path = os.path.join(base, name)
             file_paths.append(file_path)
-            if ".m" in name:
-                splits = name.split(".m")
-                class_name = splits[0]
+            splits = name.split(".")
+            class_name = splits[0]
+            if class_name not in class_names:
                 class_names.append(class_name)
     return (file_paths, class_names)
 
@@ -27,7 +27,7 @@ def rename_file(file_path, old_prefix, new_prefix):
     splits = file_path.split("/")
     last = splits.pop()
     if last.startswith(old_prefix):
-        new_last = new_prefix + last.lstrip(old_prefix)
+        new_last = new_prefix + last[len(old_prefix):]
         splits.append(new_last)
         new_file_path = "/".join(splits)
         os.rename(file_path, new_file_path)
